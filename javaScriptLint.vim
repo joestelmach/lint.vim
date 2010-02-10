@@ -1,14 +1,15 @@
 " File:         javascriptLint.vim
 " Author:       Joe Stelmach (joe@zenbe.com)
-" Version:      0.1
-" Description:  javascriptLint.vim allows the JavaScript Lint (jsl) program from 
-"               http://www.javascriptlint.com/ to be tightly integrated with vim. 
-"               The contents of a javascript file will be passed through the jsl program
-"               after the file's buffer is saved.  Any lint warnings will be placed in
-"               the quickfix window.  JavaScript Lint must be installed on your system
-"               for this plugin to work properly.  This page should get you started:
+" Version:      0.2
+" Description:  javascriptLint.vim allows the JavaScript Lint (jsl) program 
+"               from http://www.javascriptlint.com/ to be tightly integrated 
+"               with vim.  The contents of a javascript file will be passed 
+"               through the jsl program after the file's buffer is saved.  
+"               Any lint warnings will be placed in the quickfix window.  
+"               JavaScript Lint must be installed on your system for this 
+"               plugin to work properly.  This page should get you started:
 "               http://www.javascriptlint.com/docs/index.htm
-" Last Modified: March 9, 2009
+" Last Modified: May 5, 2009
 
 if !exists("jslint_command")
   let jslint_command = 'jsl'
@@ -23,18 +24,21 @@ if !exists("jslint_highlight_color")
 endif
 
 " set up auto commands
-autocmd BufWritePost,FileWritePost *.js call JsonLint()
+autocmd BufWritePost,FileWritePost *.js call JavascriptLint()
 autocmd BufWinLeave * call s:MaybeClearCursorLineColor()
 
 " Runs the current file through javascript lint and 
 " opens a quickfix window with any warnings
-function JsonLint() 
+function JavascriptLint() 
   " run javascript lint on the current file
   let current_file = shellescape(expand('%:p'))
   let cmd_output = system(g:jslint_command . ' ' . g:jslint_command_options . ' ' . current_file)
 
   " if some warnings were found, we process them
   if strlen(cmd_output) > 0
+
+    " ensure proper error format
+    let s:errorformat = "%f(%l):\%m^M"
 
     " write quickfix errors to a temp file 
     let quickfix_tmpfile_name = tempname()
@@ -50,7 +54,7 @@ function JsonLint()
 
     " open the quicfix window
     botright copen
-    let s:qfix_win = bufnr("$")
+    let s:qfix_buffer = bufnr("$")
 
     " delete the temp file
     call delete(quickfix_tmpfile_name)
@@ -59,12 +63,20 @@ function JsonLint()
   " and close the quick fix window
   else 
     call s:ClearCursorLineColor()
-    cclose
+    if(exists("s:qfix_buffer"))
+      cclose
+      unlet s:qfix_buffer
+    endif
   endif
 endfunction
 
 " sets the cursor line highlight color to the error highlight color 
 function s:SetCursorLineColor() 
+  " check for disabled cursor line
+  if(!exists("g:jslint_highlight_color") || strlen(g:jslint_highlight_color) == 0) 
+    return 
+  endif
+
   call s:ClearCursorLineColor()
   let s:highlight_on = 1 
 
@@ -88,7 +100,7 @@ endfunction
 " Conditionally reverts the cursor line color based on the presence
 " of the quickfix window
 function s:MaybeClearCursorLineColor()
-  if(exists("s:qfix_win") && s:qfix_win == bufnr("%"))
+  if(exists("s:qfix_buffer") && s:qfix_buffer == bufnr("%"))
     call s:ClearCursorLineColor()
   endif
 endfunction
