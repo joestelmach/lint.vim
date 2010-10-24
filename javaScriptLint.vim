@@ -11,17 +11,28 @@
 "               http://www.javascriptlint.com/docs/index.htm
 " Last Modified: May 5, 2009
 
-if !exists("jslint_command")
-  let jslint_command = 'jsl'
+" First time loading the plugin
+if !exists('loaded_jslint')
+  if !exists("jslint_command")
+    let jslint_command = 'jsl'
+  endif
+
+  " check executable exist
+  if !executable(jslint_command)
+    let loaded_jslint = 'no'
+    finish
+  endif
+
+  if !exists("jslint_command_options")
+    let jslint_command_options = '-nofilelisting -nocontext -nosummary -nologo -process'
+  endif
+
+  if !exists("jslint_highlight_color")
+    let jslint_highlight_color = 'DarkMagenta'
+  endif
 endif
 
-if !exists("jslint_command_options")
-  let jslint_command_options = '-nofilelisting -nocontext -nosummary -nologo -process'
-endif
-
-if !exists("jslint_highlight_color")
-  let jslint_highlight_color = 'DarkMagenta'
-endif
+let loaded_jslint = 'available'
 
 " set up auto commands
 autocmd BufWritePost,FileWritePost *.js call JavascriptLint()
