@@ -30,13 +30,22 @@ if !exists('loaded_jslint')
   if !exists("jslint_highlight_color")
     let jslint_highlight_color = 'DarkMagenta'
   endif
+
+  " execute JavascriptLint on each save
+  if !exists("jslint_onwrite")
+    let jslint_onwrite = 1
+  endif
 endif
 
 let loaded_jslint = 'available'
 
-" set up auto commands
-autocmd BufWritePost,FileWritePost *.js call JavascriptLint()
-autocmd BufWinLeave * call s:MaybeClearCursorLineColor()
+command! JavaScriptLint call JavascriptLint()
+
+if g:jslint_onwrite
+  " set up auto commands
+  autocmd BufWritePost,FileWritePost *.js call JavascriptLint()
+  autocmd BufWinLeave * call s:MaybeClearCursorLineColor()
+endif
 
 " Runs the current file through javascript lint and 
 " opens a quickfix window with any warnings
