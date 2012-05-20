@@ -20,7 +20,7 @@ The following assumes you're using OS X and [pathogen](https://github.com/tpope/
 
 ### Install our script
 
-    git clone git@github.com:joestelmach/jshint.vim.git ~/.vim/bundle/jshint.vim
+    git clone git@github.com:joestelmach/lint.vim.git ~/.vim/bundle/lint.vim
 
 ## Configuration
 
