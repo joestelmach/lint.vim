@@ -11,6 +11,16 @@
 "               http://www.javascriptlint.com/docs/index.htm
 " Last Modified: May 5, 2009
 
+" Allow the user to disable the plugin by defining loaded_javaScriptLint.
+if exists('loaded_javaScriptLint')
+  finish
+endif
+let loaded_javaScriptLint = 1
+
+" Allow continued lines.
+let s:save_cpo = &cpo
+set cpo&vim
+
 if !exists("jslint_command")
   let jslint_command = 'jsl'
 endif
@@ -24,12 +34,15 @@ if !exists("jslint_highlight_color")
 endif
 
 " set up auto commands
-autocmd BufWritePost,FileWritePost *.js call JavascriptLint()
-autocmd BufWinLeave * call s:MaybeClearCursorLineColor()
+augroup javaScriptLint
+  au!
+  autocmd BufWritePost,FileWritePost *.js call JavascriptLint()
+  autocmd BufWinLeave * call s:MaybeClearCursorLineColor()
+augroup END
 
 " Runs the current file through javascript lint and 
 " opens a quickfix window with any warnings
-function JavascriptLint() 
+function! JavascriptLint() 
   " run javascript lint on the current file
   let current_file = shellescape(expand('%:p'))
   let cmd_output = system(g:jslint_command . ' ' . g:jslint_command_options . ' ' . current_file)
@@ -71,7 +84,7 @@ function JavascriptLint()
 endfunction
 
 " sets the cursor line highlight color to the error highlight color 
-function s:SetCursorLineColor() 
+function! s:SetCursorLineColor() 
   " check for disabled cursor line
   if(!exists("g:jslint_highlight_color") || strlen(g:jslint_highlight_color) == 0) 
     return 
@@ -99,14 +112,14 @@ endfunction
 
 " Conditionally reverts the cursor line color based on the presence
 " of the quickfix window
-function s:MaybeClearCursorLineColor()
+function! s:MaybeClearCursorLineColor()
   if(exists("s:qfix_buffer") && s:qfix_buffer == bufnr("%"))
     call s:ClearCursorLineColor()
   endif
 endfunction
 
 " Reverts the cursor line color
-function s:ClearCursorLineColor()
+function! s:ClearCursorLineColor()
   " only revert if our highlight is currently enabled
   if(exists("s:highlight_on") && s:highlight_on) 
     let s:highlight_on = 0 
@@ -122,3 +135,8 @@ function s:ClearCursorLineColor()
     endif
   endif
 endfunction
+
+" Restore cpo value
+let &cpo = s:save_cpo
+unlet s:save_cpo
+" vim: set et sw=2 sts=2:
