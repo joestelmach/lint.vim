@@ -17,6 +17,10 @@ if exists('loaded_javaScriptLint')
 endif
 let loaded_javaScriptLint = 1
 
+" Allow continued lines.
+let s:save_cpo = &cpo
+set cpo&vim
+
 if !exists("jslint_command")
   let jslint_command = 'jsl'
 endif
@@ -131,3 +135,7 @@ function! s:ClearCursorLineColor()
     endif
   endif
 endfunction
+
+" Restore cpo value
+let &cpo = s:save_cpo
+unlet s:save_cpo
