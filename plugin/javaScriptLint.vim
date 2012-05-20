@@ -11,6 +11,12 @@
 "               http://www.javascriptlint.com/docs/index.htm
 " Last Modified: May 5, 2009
 
+" Allow the user to disable the plugin by defining loaded_javaScriptLint.
+if exists('loaded_javaScriptLint')
+  finish
+endif
+let loaded_javaScriptLint = 1
+
 if !exists("jslint_command")
   let jslint_command = 'jsl'
 endif
