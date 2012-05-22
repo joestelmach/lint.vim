@@ -24,7 +24,8 @@ endif
 " set up auto commands
 augroup javaScriptLint
   au!
-  autocmd BufWritePost,FileWritePost *.js call JavascriptLint()
+  autocmd BufWritePost,FileWritePost *.js call JSHint()
+  autocmd BufWritePost,FileWritePost *.css call CSSLint()
   autocmd BufWinLeave * call s:MaybeClearCursorLineColor()
 augroup END
 
@@ -32,17 +33,26 @@ let s:file_path = expand("<sfile>")
 let s:last_slash = strridx(s:file_path, "/")
 let s:dir_path = strpart(s:file_path, 0, s:last_slash) . '/../'
 
-" Runs the current file through javascript lint and 
-" opens a quickfix window with any warnings
-function! JavascriptLint() 
-  " run javascript lint on the current file
-  let current_file = shellescape(expand('%:p'))
-  
-  let params = s:dir_path . 'js/jshint.js ' . s:dir_path . 'js/options.js ' . s:dir_path . 'js/run.js -- gcc ' . current_file
-  let cmd_output = system(g:d8_command . ' ' . params)
+" Invokes JSHint on the current file
+function! JSHint() 
+  call s:lint('jshint')
+endfunction
 
+" Invokes CSSHint on the current file
+function! CSSLint() 
+  call s:lint('csslint')
+endfunction
+
+function! s:lint(cmd)
+  let lint_script = s:dir_path . 'js/' . a:cmd . '/' . a:cmd . '.js '
+  let options_script = s:dir_path . 'js/' . a:cmd . '/options.js ' 
+  let run_script = s:dir_path . 'js/run.js -- ' . a:cmd . ' ' 
+  let all_scripts = ' ' . lint_script . options_script . run_script
+  let current_file = shellescape(expand('%:p'))
+  let output = system(g:d8_command . all_scripts . current_file)
+  
   " if some warnings were found, we process them
-  if strlen(cmd_output) > 0
+  if strlen(output) > 0
 
     " ensure proper error format
     let s:errorformat = "%f(%l):\%m^M"
@@ -50,7 +60,7 @@ function! JavascriptLint()
     " write quickfix errors to a temp file 
     let quickfix_tmpfile_name = tempname()
     exe "redir! > " . quickfix_tmpfile_name
-      silent echon cmd_output
+      silent echon output
     redir END
 
     " read in the errors temp file 
@@ -68,13 +78,14 @@ function! JavascriptLint()
 
   " if no javascript warnings are found, we revert the cursorline color
   " and close the quick fix window
-  else 
+  else
     call s:ClearCursorLineColor()
     if(exists("s:qfix_buffer"))
       cclose
       unlet s:qfix_buffer
     endif
   endif
+
 endfunction
 
 " sets the cursor line highlight color to the error highlight color 
