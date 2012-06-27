@@ -44,9 +44,10 @@ function! CSSLint()
 endfunction
 
 function! s:lint(cmd)
-  let lint_script = s:dir_path . 'js/' . a:cmd . '/' . a:cmd . '.js '
-  let options_script = s:dir_path . 'js/' . a:cmd . '/options.js ' 
-  let run_script = s:dir_path . 'js/run.js -- ' . a:cmd . ' ' 
+  let esc_path = shellescape(s:dir_path)
+  let lint_script = esc_path . 'js/' . a:cmd . '/' . a:cmd . '.js '
+  let options_script = esc_path . 'js/' . a:cmd . '/options.js '
+  let run_script = esc_path . 'js/run.js -- ' . a:cmd . ' '
   let all_scripts = ' ' . lint_script . options_script . run_script
   let current_file = shellescape(expand('%:p'))
   let output = system(g:d8_command . all_scripts . current_file)
