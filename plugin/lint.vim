@@ -1,7 +1,7 @@
 " File:          lint.vim
 " Author:        Joe Stelmach (joestelmach@gmail.com)
 " Version:       0.3
-" Description:   V8-powered JSHint Integration  
+" Description:   V8-powered JSHint and CSSLint Integration  
 " Last Modified: May 5, 2012
 
 " Allow the user to disable the plugin
@@ -44,10 +44,19 @@ function! CSSLint()
 endfunction
 
 function! s:lint(cmd)
+
+  " if an options file has been given for this command, we use it
+  if(exists('g:' . a:cmd . '_options_file'))
+    execute 'let options_script = g:' . a:cmd . '_options_file'
+
+  " otherwise we'll use the bundled options file
+  else
+    let options_script = s:dir_path . 'js/' . a:cmd . '/options.js' 
+  endif
+
   let lint_script = s:dir_path . 'js/' . a:cmd . '/' . a:cmd . '.js '
-  let options_script = s:dir_path . 'js/' . a:cmd . '/options.js ' 
   let run_script = s:dir_path . 'js/run.js -- ' . a:cmd . ' ' 
-  let all_scripts = ' ' . lint_script . options_script . run_script
+  let all_scripts = ' ' . lint_script . ' ' . options_script . ' ' .run_script
   let current_file = shellescape(expand('%:p'))
   let output = system(g:d8_command . all_scripts . current_file)
   
