@@ -24,7 +24,15 @@ The following assumes you're using OS X and [pathogen](https://github.com/tpope/
 
 ## Configuration
 
-All [JSHint Options](http://www.jshint.com/options/) can be set in ~/.vim/bundle/jshint.vim/js/jshint/options.js.  Similarly, [CSSLint Options](https://github.com/stubbornella/csslint/wiki/Rules) can be set in ~/.vim/bundle/jshint.vim/js/csslint/options.js
+[JSHint](http://www.jshint.com/options/) and [CSSLint](https://github.com/stubbornella/csslint/wiki/Rules) options can be configured with the following files:
+
+    ~/.vim/bundle/jshint.vim/js/jshint/options.js
+    ~/.vim/bundle/jshint.vim/js/csslint/options.js
+
+Alternatively, you can specify an external location for these files in your .vimrc file:
+
+    let jshint_options_file = '/full/path/to/jshint/options.js'                              
+    let csslint_options_file = '/full/path/to/csslint/options.js'
 
 If you're d8 executable is not in your classpath, the full path can be specified in your .vimrc file:
 
