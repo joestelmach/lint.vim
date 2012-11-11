@@ -25,6 +25,7 @@ endif
 augroup javaScriptLint
   au!
   autocmd BufWritePost,FileWritePost *.js call JSHint()
+  autocmd BufWritePost,FileWritePost *.json call JSHint()
   autocmd BufWritePost,FileWritePost *.css call CSSLint()
   autocmd BufWinLeave * call s:MaybeClearCursorLineColor()
 augroup END
