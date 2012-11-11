@@ -29,7 +29,7 @@ augroup javaScriptLint
   autocmd BufWinLeave * call s:MaybeClearCursorLineColor()
 augroup END
 
-let s:dir_path = expand("<sfile>:s:h") . '/../'
+let s:dir_path = expand("<sfile>:p:h") . '/../'
 
 " Invokes JSHint on the current file
 function! JSHint() 
