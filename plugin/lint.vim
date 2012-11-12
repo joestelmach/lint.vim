@@ -25,13 +25,12 @@ endif
 augroup javaScriptLint
   au!
   autocmd BufWritePost,FileWritePost *.js call JSHint()
+  autocmd BufWritePost,FileWritePost *.json call JSHint()
   autocmd BufWritePost,FileWritePost *.css call CSSLint()
   autocmd BufWinLeave * call s:MaybeClearCursorLineColor()
 augroup END
 
-let s:file_path = expand("<sfile>")
-let s:last_slash = strridx(s:file_path, "/")
-let s:dir_path = strpart(s:file_path, 0, s:last_slash) . '/../'
+let s:dir_path = expand("<sfile>:p:h") . '/../'
 
 " Invokes JSHint on the current file
 function! JSHint() 
