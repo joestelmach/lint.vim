@@ -26,8 +26,8 @@ The following assumes you're using OS X and [pathogen](https://github.com/tpope/
 
 [JSHint](http://www.jshint.com/options/) and [CSSLint](https://github.com/stubbornella/csslint/wiki/Rules) options can be configured with the following files:
 
-    ~/.vim/bundle/jshint.vim/js/jshint/options.js
-    ~/.vim/bundle/jshint.vim/js/csslint/options.js
+    ~/.vim/bundle/lint.vim/js/jshint/options.js
+    ~/.vim/bundle/lint.vim/js/csslint/options.js
 
 Alternatively, you can specify an external location for these files in your .vimrc file:
 
