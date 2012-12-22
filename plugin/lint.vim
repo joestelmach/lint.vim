@@ -21,14 +21,42 @@ if !exists("lint_highlight_color")
   let lint_highlight_color = 'DarkMagenta'
 endif
 
-" set up auto commands
-augroup javaScriptLint
-  au!
-  autocmd BufWritePost,FileWritePost *.js call JSHint()
-  autocmd BufWritePost,FileWritePost *.json call JSHint()
-  autocmd BufWritePost,FileWritePost *.css call CSSLint()
-  autocmd BufWinLeave * call s:MaybeClearCursorLineColor()
-augroup END
+function! s:init()
+  let b:lint_buffer = 1
+  if exists('g:lint_default') && g:lint_default == 0
+    let b:lint_buffer = 0
+  endif
+  if b:lint_buffer == 1
+    call s:setupAutocommands(expand('%:e'))
+  endif
+endfunction
+
+function! s:setupAutocommands(extension)
+  augroup javaScriptLint
+    au!
+    if a:extension == 'js' || a:extension == 'json'
+      autocmd BufWritePost,FileWritePost <buffer> call JSHint()
+    elseif a:extension == 'css'
+      autocmd BufWritePost,FileWritePost <buffer> call CSSLint()
+    endif
+    autocmd BufWinLeave * call s:MaybeClearCursorLineColor()
+  augroup END
+endfunction
+
+function! LintVimToggle(filetype)
+  if b:lint_buffer == 0
+    call s:setupAutocommands(a:filetype)
+  else
+    augroup javaScriptLint 
+      au!
+    augroup END
+  endif
+  let b:lint_buffer = b:lint_buffer == 1 ? 0 : 1
+endfunction
+
+com! LintVimToggle call LintVimToggle(expand('%:e'))
+
+autocmd BufRead *.js,*.json,*.css call s:init()
 
 let s:dir_path = expand("<sfile>:p:h") . '/../'
 
