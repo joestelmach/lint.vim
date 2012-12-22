@@ -42,6 +42,14 @@ If you're not down with Dark Magenta, an error highlight color may be specified:
 
     let jshint_highlight_color = 'DarkGray'
 
+You can toggle the plugin on and off by the command:
+
+    LintVimToggle
+
+This works on file (buffer) basis. If you want it to be off by default you can do that by this command in your .vimrc file:
+
+    let lint_default = 0
+
 You can also disable the plugin entirely:
 
     let disable_lint = 1 
