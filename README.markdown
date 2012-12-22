@@ -46,7 +46,7 @@ You can toggle the plugin on and off by the command:
 
     LintVimToggle
 
-This works on file (buffer) basis. If you want it to be off by default you can do that by this command in your .vimrc file:
+This works on file (buffer) basis. You can set it off by default:
 
     let lint_default = 0
 
