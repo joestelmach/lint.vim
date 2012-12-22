@@ -31,21 +31,25 @@ function! s:init()
   endif
 endfunction
 
-function! s:setupAutocommands(extension)
+function! s:setupAutocommands(file_extension)
   augroup javaScriptLint
     au!
-    if a:extension == 'js' || a:extension == 'json'
+    if a:file_extension == 'js' || a:file_extension == 'json'
       autocmd BufWritePost,FileWritePost <buffer> call JSHint()
-    elseif a:extension == 'css'
+    elseif a:file_extension == 'css'
       autocmd BufWritePost,FileWritePost <buffer> call CSSLint()
     endif
     autocmd BufWinLeave * call s:MaybeClearCursorLineColor()
   augroup END
 endfunction
 
-function! LintVimToggle(filetype)
+function! LintVimToggle(file_extension)
+  if !exists('b:lint_buffer')
+    " this happens if the file is not supported (not css, js or json)
+    return
+  endif
   if b:lint_buffer == 0
-    call s:setupAutocommands(a:filetype)
+    call s:setupAutocommands(a:file_extension)
   else
     augroup javaScriptLint 
       au!
