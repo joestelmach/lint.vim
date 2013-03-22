@@ -1,5 +1,7 @@
 
 // list of allowed global objects
+/*jshint unused:false */
+
 var JSHINT_GLOBALS = {
   //'alert' : true
 };
@@ -13,6 +15,10 @@ var JSHINT_OPTIONS = {
   //   2. Bitwise operations are very rare in JavaScript programs and very often & is simply a
   //   mistyped &&.
   bitwise : true,
+
+  // This option allows you to force all variable names to use either camelCase style or 
+  // UPPER_CASE with underscores.
+  camelcase : false,
 
   // This option requires you to always put curly braces around blocks in loops and conditionals.
   curly : true,
@@ -36,6 +42,9 @@ var JSHINT_OPTIONS = {
   // in parentheses. Wrapping parentheses assists readers of your code in understanding
   // that the expression is the result of a function, and not the function itself.
   immed : true,
+
+  // This option enforces specific tab width for your code.
+  indent : false,
 
   // This option prohibits the use of a variable before it was defined. JavaScript has
   // function scope only and, in addition to that, all variables are always moved—or
@@ -81,14 +90,21 @@ var JSHINT_OPTIONS = {
   // languages—such as Python—that go completely without these operators.
   plusplus : true,
 
-  // This option prohibits the use of unsafe . in regular expressions.
-  regexp : true,
+  // This option enforces the consistency of quotation marks used throughout your code. It accepts 
+  // three values: true if you don't want to enforce one particular style but want some 
+  // consistency, "single" if you want to allow only single quotes and "double" if you want to 
+  // allow only double quotes.
+  quotmark : false,
 
   // This option prohibits the use of explicitly undeclared variables. This option is very useful
   // for spotting leaking and mistyped variables.
   // If your variable is defined in another file, you can use /*global ... */ syntaxto tell
   // JSHint about it. See the About page for more information.
   undef : true,
+
+  // This option warns when you define and never use your variables. It is very useful for 
+  // general code cleanup, especially when used in addition to undef.
+  unused : true,
 
   // This option requires all functions to run in EcmaScript 5's strict mode. Strict mode is a way
   // to opt in to a restricted variant of JavaScript. Strict mode eliminates some JavaScript pitfalls
@@ -103,6 +119,22 @@ var JSHINT_OPTIONS = {
   // This option makes it an error to leave a trailing whitespace in your code. Trailing whitespaces
   // can be source of nasty bugs with multi-line strings in JavaScript:
   trailing : true,
+
+  // This option lets you set the max number of formal parameters allowed per function:
+  maxparams : false,
+
+  // This option lets you control how nested do you want your blocks to be:
+  maxdepth : false, 
+
+  // This option lets you set the max number of statements allowed per function:
+  maxstatements : false,
+
+  // This option lets you control cyclomatic complexity throughout your code. Cyclomatic complexity 
+  // measures the number of linearly independent paths through a program's source code.
+  maxcomplexity : false,
+
+  // This option lets you set the maximum length of a line.
+  maxlen : false,
 
   // This option suppresses warnings about missing semicolons. There is a lot of FUD about semicolon
   // spreaded by quite a few people in the community. The common myths are that semicolons are
@@ -165,6 +197,9 @@ var JSHINT_OPTIONS = {
   // This option suppresses all warnings about possibly unsafe line breakings in your code.
   laxbreak : false,
 
+  // This option suppresses warnings about comma-first coding style
+  laxcomma : false,
+
   // This option suppresses warnings about functions inside of loops. Defining functions
   // inside of loops can lead to bugs
   loopfunc : false,
@@ -177,17 +212,9 @@ var JSHINT_OPTIONS = {
   // character and a whitespace.
   multistr : false,
 
-  // This option suppresses watnings about switches with just one case. Most of the time you
-  // want to use if instead of switch if there is only one case. However, some code generators
-  // prefer to generate switch statements.
-  onecase : false,
-
   // This option suppresses warnings about the __proto__ property. This property is deprecated
   // and not supported by all browsers.
   proto : false,
-
-  // This option suppresses warnings about unescaped - in the end of regular expressions.
-  regexdash : false,
 
   // This option suppresses warnings about the use of script-targeted URLs—such as
   // javascript:....
@@ -261,7 +288,30 @@ var JSHINT_OPTIONS = {
   // environment. Rhino is an open-source implementation of JavaScript written entirely in Java.
   rhino : false,
 
+  // This option defines globals available when your code is running inside of a Web Worker. 
+  // Web Workers provide a simple means for web content to run scripts in background threads.
+  worker : false,
+
   // This option defines globals available when your code is running as a script for
   // the Windows Script Host.
-  wsh : false
+  wsh : false,
+
+  // This option defines globals exposed by the YUI JavaScript framework.
+  yui : false,
+
+  // This option disallows the use of dangling _ in variables. We don't know why would you need it.
+  nomen : false,
+
+  // This option allows only one var statement per function. Some people think that having a single 
+  // var in a function, at the top of the function, helps readability. Example (taken from 
+  // JSLint/JSHint source code):
+  onevar : false,
+
+  // This option makes JSHint stop on the first error or warning.
+  passfail : false,
+
+  // This option make JSHint check your source code against Douglas Crockford's JavaScript 
+  // coding style. Unfortunately, his “The Good Parts” book aside, the actual rules are not 
+  // very well documented.
+  white : false
 };
