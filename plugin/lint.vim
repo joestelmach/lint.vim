@@ -103,8 +103,13 @@ function! s:lint(cmd)
       silent echon output
     redir END
 
+    let s:quickfix_cmd = 'cfile '
+    if exists('g:lint_skip_jump_to_first_error') && g:lint_skip_jump_to_first_error
+      let s:quickfix_cmd = 'cgetfile '
+    endif
+
     " read in the errors temp file 
-    execute "silent! cfile " . quickfix_tmpfile_name
+    execute "silent! " s:quickfix_cmd . quickfix_tmpfile_name
 
     " change the cursor line to something hard to miss 
     call s:SetCursorLineColor()
