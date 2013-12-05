@@ -17,6 +17,9 @@ The following assumes you're using OS X and [pathogen](https://github.com/tpope/
     cd ..
     rm -rf v8
 
+    # For homebrew users
+    brew install v8
+
 
 ### Install our script
 
@@ -31,7 +34,7 @@ The following assumes you're using OS X and [pathogen](https://github.com/tpope/
 
 Alternatively, you can specify an external location for these files in your .vimrc file:
 
-    let jshint_options_file = '/full/path/to/jshint/options.js'                              
+    let jshint_options_file = '/full/path/to/jshint/options.js'
     let csslint_options_file = '/full/path/to/csslint/options.js'
 
 If you're d8 executable is not in your classpath, the full path can be specified in your .vimrc file:
@@ -52,4 +55,4 @@ This works on file (buffer) basis. You can set it off by default:
 
 You can also disable the plugin entirely:
 
-    let disable_lint = 1 
+    let disable_lint = 1
